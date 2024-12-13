@@ -1,4 +1,5 @@
 import os
+import shutil
 import torch
 import librosa
 import numpy as np
@@ -111,19 +112,19 @@ def process_video_for_music_detection(video_path, output_folder="output"):
             os.system(f"ffmpeg -i \"{music_clip_path}\" -i \"{music_only_audio_file}\" -c:v copy -c:a aac -map 0:v -map 1:a:0? \"{music_only_clip_file}\" -y")
 
             # Clean up temporary files
-            os.remove(audio_clip_path)
-            os.remove(os.path.join(output_folder, "mdx_extra"))
+            os.remove(audio_clip_path)            
+            shutil.rmtree(os.path.join(output_folder, "mdx_extra"))
             
         except Exception as e:
             print(f"Error processing clip {i + 1}: {str(e)}")
             continue
         
     # Step 5: Save timestamps
-    timestamps_file = os.path.join(output_folder, "music_timestamps.txt")
-    with open(timestamps_file, "w") as f:
-        for start, end in music_intervals:
-            f.write(f"{start:.2f},{end:.2f}\n")
-    print(f"Timestamps saved to: {timestamps_file}")
+    # timestamps_file = os.path.join(output_folder, "music_timestamps.txt")
+    # with open(timestamps_file, "w") as f:
+    #     for start, end in music_intervals:
+    #         f.write(f"{start:.2f},{end:.2f}\n")
+    # print(f"Timestamps saved to: {timestamps_file}")
 
 # Example Usage
 video_path = 'path/to/your/video.mp4'
