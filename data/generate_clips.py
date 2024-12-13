@@ -85,7 +85,6 @@ def process_video_for_music_detection(video_path, output_folder="output"):
     os.makedirs(full_audio_clips_dir, exist_ok=True)
     os.makedirs(vocals_only_clips_dir, exist_ok=True)
     os.makedirs(music_only_clips_dir, exist_ok=True)
-    os.remove(audio_path)
 
     clip_paths = []
     for i, (start, end) in enumerate(music_intervals):
@@ -113,11 +112,14 @@ def process_video_for_music_detection(video_path, output_folder="output"):
 
             # Clean up temporary files
             os.remove(audio_clip_path)            
-            shutil.rmtree(os.path.join(output_folder, "mdx_extra"))
             
         except Exception as e:
             print(f"Error processing clip {i + 1}: {str(e)}")
             continue
+        
+    # Clean up temporary files
+    os.remove(audio_path)
+    shutil.rmtree(os.path.join(output_folder, "mdx_extra"))
         
     # Step 5: Save timestamps
     # timestamps_file = os.path.join(output_folder, "music_timestamps.txt")
